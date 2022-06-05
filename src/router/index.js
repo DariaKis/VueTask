@@ -1,25 +1,62 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import TasksList from '../views/TasksList.vue'
+import LoginPage from '../views/LoginPage.vue'
+import UsersList from '../views/UsersList.vue'
+import UserCard from "@/components/UserCard.vue";
+import TaskCard from "@/components/TaskCard";
+import EventTask from "@/components/EventTask";
+import ModalEvent from "@/components/ModalEvent";
+
+
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    path: '/tasks',
+    name: 'tasks',
+    component: TasksList
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
-]
+    path: '/',
+    name: 'login',
+    component: LoginPage
+  },
+  {
+    path: '/users',
+    name: 'users',
+    component: UsersList
+  },
+  {
+    path: '/userCard/:id',
+    name: 'userCard',
+    component: UserCard,
+  },
+  {
+    path: '/taskCard/:id',
+    name: 'taskCard',
+    component: TaskCard,
+
+  },
+  {
+    path: '/Modal',
+    name: 'ModalEvent',
+    component: ModalEvent,
+
+  },
+  {
+    path: '/eventTask',
+    name: 'eventTask',
+    component: EventTask,
+  },{
+      path: '/eventTask/:id',
+      name: 'editTask',
+      component: EventTask,
+
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-})
+});
 
 export default router
