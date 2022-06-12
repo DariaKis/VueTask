@@ -1,9 +1,7 @@
 <template>
     <form >
         <div class="resetType">
-            <div class="input__title" v-if="selectedItem.length===0">Тип</div>
-            <div class="input__title" v-else-if="selectedItem.length===2">Выбрано: все</div>
-            <div class="input__title" v-else>Выбрано: {{selectedItem.length}}</div>
+            <div class="input__title">{{titleOfSelect}}</div>
             <div class="arrow"></div>
         </div>
         <div class="__select"  >
@@ -50,6 +48,16 @@
 
         },
         computed:{
+            titleOfSelect(){
+                if(this.selectedItem.length===0){
+                    return "Тип"
+                }else if(this.selectedItem.length===2){
+                    return "Выбрано: все"
+                }else{
+                    return "Выбрано: " + this.selectedItem.length
+                }
+            },
+
         },
         create(){
 

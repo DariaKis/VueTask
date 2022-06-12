@@ -42,6 +42,8 @@
 
   import isAuth from "../api/isAuth";
   import router from "../router";
+  import {mapActions, mapGetters} from 'vuex';
+
 
   export default {
 
@@ -60,9 +62,13 @@
     computed:{
       isSignInForm(){
         return this.mode==='signIn'
-      }
+      },
+      ...mapGetters(['LOGIN_ID'])
     },
     methods:{
+      ...mapActions([
+        'GET_LOGIN_ID'
+      ]),
       formSubmit(){
         this.signIn
       },
@@ -103,6 +109,10 @@
     },
     created(){
 
+    },
+
+    mounted(){
+    this.GET_LOGIN_ID()
     }
   }
 

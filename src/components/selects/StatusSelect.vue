@@ -58,7 +58,7 @@
 
         },
         created(){
-            console.log(this.selectedItem)
+            // console.log(this.selectedItem)
         }
     }
 

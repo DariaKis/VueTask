@@ -46,7 +46,8 @@ const routes = [
     path: '/eventTask',
     name: 'eventTask',
     component: EventTask,
-  },{
+  },
+  {
       path: '/eventTask/:id',
       name: 'editTask',
       component: EventTask,

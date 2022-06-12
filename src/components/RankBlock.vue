@@ -1,6 +1,7 @@
 <template>
     <div>
         <div class="wrapper"  v-if="task.rank==='high'">
+
             <div class="task__highRank"><img class="arrowIcon" src="@/assets/img/High.png"/>Высокий</div>
         </div>
         <div class="wrapper"  v-else-if="task.rank==='medium'">
@@ -9,6 +10,7 @@
         <div class="wrapper"  v-else>
             <div class="task__lowRank"><img class="arrowIcon" src="@/assets/img/Low.png"/>Низкий</div>
         </div>
+
     </div>
 </template>
 <script>

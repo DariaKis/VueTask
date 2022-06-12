@@ -1,17 +1,11 @@
 <template>
     <div class="card__footer" >
-        <div class="tabs">
-            <button  class="tabs__btn">Назад</button>
 
-            <button class="tab" v-for="page in pages" :key="page" :page="page" >
-                <div :class="{showing__list: currentPage===page}" @click="handlePageChange(page)" > {{page + 1}} </div>
-            </button>
-
-            <button class="tabs__btn" >Вперед</button>
-        </div>
-        <div class="showing__list" >
-            Показано {{page + 1}}-{{this.pageCount}} из {{this.pageCount}}
-        </div>
+        <footer>
+        <slot name="footerTask"></slot>
+        <slot name="footerUser"></slot>
+        <slot name="usersTasks"></slot>
+        </footer>
     </div>
 </template>
 <script>
@@ -19,24 +13,12 @@
     export default {
         name: 'PagingBlock',
         props: {
-            user:{
-                type: Object,
-                required:true
-            },
-            task:{
-                type: Object,
-                required:true
-            },
-            total:{
-                type:Number,
-                required:true
-            }
 
         },
         data (){
             return {
                 pages:Array.from([]),
-                page:0,
+
                 currentPage:0,
                 limit:10
             }
@@ -74,7 +56,12 @@
 </script>
 
 <style lang="scss">
-    .card__footer{
+    footer{
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .card__footer {
         width:100%;
         justify-content: space-between;
         display: flex;
@@ -115,18 +102,20 @@
                 align-items: center;
                 &.active {
                     background: #F4F4F4;
-                    color:black;
+                    color:#333333;
                     border: 1px solid #333333;
+                }
+
+                .showing__list{
+                    font-style: normal;
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 16px;
+                    color: #B5B5B5;
                 }
             }
         }
-        .showing__list{
-            font-style: normal;
-            font-weight: 400;
-            font-size: 14px;
-            line-height: 16px;
-            color: #B5B5B5;
-        }
+
 
     }
 </style>
