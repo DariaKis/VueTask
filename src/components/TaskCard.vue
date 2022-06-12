@@ -37,11 +37,11 @@
                 <div class="about__task">
                     <div class="formItem">
                         <h3 class="itemTitle">Исполнитель</h3>
-                        <h3 class="itemSubtitle">{{USERS.find(x=>x.id===task.assignedId).username}}</h3>
+                        <h3 class="itemSubtitle">{{assignedName}}</h3>
                     </div>
                     <div class="formItem">
                         <h3 class="itemTitle">Автор задачи</h3>
-                        <h3 class="itemSubtitle">{{USERS.find(x=>x.id===task.userId).username}}</h3>
+                        <h3 class="itemSubtitle">{{creatorName}}</h3>
                     </div>
                     <div class="formItem">
                         <h3 class="itemTitle">Тип запроса</h3>
@@ -88,7 +88,7 @@
 
                     <CommentsBlock :id="task.id" :task="task"/>
 
-                <ModalEvent :close="close" :is-modal-visible="isModalVisible" :comments="comments" :users="users" :tasks="tasks" />
+                <ModalEvent :close="close" :is-modal-visible="isModalVisible" :comments="comments" :users="users" :task="task" @click="showModal"/>
             </div>
         </div>
     </div>
@@ -153,6 +153,12 @@
              minutes (){
                 return this.task.timeInMinutes % 60
              },
+            assignedName() {
+                return this.USERS.find(x => x.id === this.task.assignedId).username
+            },
+            creatorName(){
+                return this.USERS.find(x=>x.id===this.task.userId).username
+            }
         },
         methods: {
             ...mapActions([

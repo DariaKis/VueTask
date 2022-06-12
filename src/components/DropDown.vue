@@ -5,20 +5,21 @@
         <div class="bar"></div>
         <div class="task__tools">
             <div class="tools__wrapper">
-                <router-link :to="{name:'editTask', params:{id: task.id}}" :key="task" class="tools" >Редактировать</router-link>
-                <h4 class="tools" @click="deleteTaskItem" :id="task.id">Удалить</h4>
-                <div v-if="isShowForInProgress(task.status)">
-                    <h4 class="tools" :id="task.id" @click="statusToInProgress">Взять в работу</h4>
-                                    </div>
-                                     <div v-if="isShowForTesting(task.status)">
-                                        <h4 class="tools" :id="task.id" @click="statusToTesting">На тестирование</h4>
-                                     </div>
-                                     <div v-if="isShowForOpened(task.status)">
-                                        <h4 class="tools" :id="task.id" @click="statusToOpened">Переоткрыть</h4>
-                                     </div>
-                                    <div v-if="isShowForComplete(task.status)" >
-                                         <h4 class="tools" :id="task.id" @click="statusToComplete"  >Готово</h4>
-                                    </div>
+            <slot></slot>
+<!--                <router-link :to="{name:'editTask', params:{id: task.id}}" :key="task" class="tools" >Редактировать</router-link>-->
+<!--                <h4 class="tools" @click="deleteTaskItem" :id="task.id">Удалить</h4>-->
+<!--                <div v-if="isShowForInProgress(task.status)">-->
+<!--                    <h4 class="tools" :id="task.id" @click="statusToInProgress">Взять в работу</h4>-->
+<!--                                    </div>-->
+<!--                                     <div v-if="isShowForTesting(task.status)">-->
+<!--                                        <h4 class="tools" :id="task.id" @click="statusToTesting">На тестирование</h4>-->
+<!--                                     </div>-->
+<!--                                     <div v-if="isShowForOpened(task.status)">-->
+<!--                                        <h4 class="tools" :id="task.id" @click="statusToOpened">Переоткрыть</h4>-->
+<!--                                     </div>-->
+<!--                                    <div v-if="isShowForComplete(task.status)" >-->
+<!--                                         <h4 class="tools" :id="task.id" @click="statusToComplete"  >Готово</h4>-->
+<!--                                    </div>-->
             </div>
         </div>
     </div>
@@ -35,66 +36,66 @@
             },
         name: 'DropDown',
         props: {
-            task:{
-                type: Object,
-                required:true
-            },
-            id:{
-                type:String,
-                required: true
-            },
-            deleteTask:{
-                type:Function,
-                required: true
-            },
-            statusComplete:{
-                type:Function,
-                required: true
-            },
-            statusInProgress :{
-                type:Function,
-                    required: true
-            },
-            statusOpened :{
-                type:Function,
-                required: true
-            },
-            statusTesting :{
-                type:Function,
-                required: true
-            }
+            // task:{
+            //     type: Object,
+            //     required:true
+            // },
+            // id:{
+            //     type:String,
+            //     required: true
+            // },
+            // deleteTask:{
+            //     type:Function,
+            //     required: true
+            // },
+            // statusComplete:{
+            //     type:Function,
+            //     required: true
+            // },
+            // statusInProgress :{
+            //     type:Function,
+            //         required: true
+            // },
+            // statusOpened :{
+            //     type:Function,
+            //     required: true
+            // },
+            // statusTesting :{
+            //     type:Function,
+            //     required: true
+            // }
 
         },
         methods:{
-            deleteTaskItem(){
-                this.deleteTask()
-            },
-            statusToTesting(){
-                this.statusTesting();
-
-            },
-            statusToInProgress(){
-                this.statusInProgress()
-            },
-            statusToOpened(){
-              this.statusOpened()
-            },
-            statusToComplete(){
-               this.statusComplete()
-            },
-
-            isShowForInProgress(status){
-                return status==="opened" || status==="testing"
-            },
-            isShowForTesting(status) {
-                return status === "inProgress"
-            },
-            isShowForOpened(status){
-                return status==="inProgress" || status==="complete"|| status==="testing"
-            },
-            isShowForComplete(status){
-                return status==="opened" ||status==="inProgress"|| status==="testing"
-            }
+            // deleteTaskItem(){
+            //     this.deleteTask()
+            // },
+            // statusToTesting(){
+            //     this.statusTesting();
+            //
+            // },
+            // statusToInProgress(){
+            //     this.statusInProgress()
+            // },
+            // statusToOpened(){
+            //   this.statusOpened()
+            // },
+            // statusToComplete(){
+            //    this.statusComplete()
+            // },
+            //
+            // isShowForInProgress(status){
+            //     return status==="opened" || status==="testing"
+            // },
+            // isShowForTesting(status) {
+            //     return status === "inProgress"
+            // },
+            // isShowForOpened(status){
+            //     return status==="inProgress" || status==="complete"|| status==="testing"
+            // },
+            // isShowForComplete(status){
+            //     return status==="opened" ||status==="inProgress"|| status==="testing"
+            // }
         },
 
     }

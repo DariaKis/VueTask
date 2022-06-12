@@ -15,7 +15,9 @@
                         </h1>
                     </div>
                     <div>
-                        <button class="edit__task" @click="createTask">Сохранить</button>
+                        <router-link :to="{name:'tasks'}">
+                            <button class="edit__task" @click="createTask">Сохранить</button>
+                        </router-link>
                         <router-link to="/tasks" class="take__to__work">Отмена</router-link>
                     </div>
                 </div>
@@ -25,7 +27,7 @@
                         <select
                                 name="assignedId"
                                 id="assignedId"
-
+                                :disabled="userId?true:false"
                                 v-model="form.assignedId"
                                 @click="prevent"
                         >
@@ -75,9 +77,7 @@
 
                         >
                         </textarea>
-                        <div>
-                            {{this.task.title}}
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -92,15 +92,17 @@
     export default {
         data(){
             return {
-                task:{},
+                currentTitle:"",
+                task:this.$store.state.tasks.find(task => task.id === this.$route.params.id),
                 userInfo:JSON.parse(localStorage.getItem('user-info')),
                 form: {
-                    userId: JSON.parse(localStorage.getItem('user-info')).id,
-                    title:this.$route.params.id ? "здесь данные из таски"  : "",
-                    description:this.$route.params.id ? "здесь данные из таски": "",
-                    type: this.$route.params.id ? "здесь данные из таски":"task",
-                    rank:this.$route.params.id ? "здесь данные из таски":"low",
-                    assignedId: this.$route.params.id ? "здесь данные из таски" : "",
+                    userId: "",
+                    title:"",
+                    description: "",
+                    type:"task",
+                    rank:"low",
+                    assignedId:"",
+                    id:""
                 },
 
         }},
@@ -113,7 +115,8 @@
             id:{
                 type:String,
                 required:true
-            }
+            },
+
         },
 
 
@@ -122,7 +125,6 @@
         },
 
         methods:{
-
 
             createTask() {
                 return axiosInstance.put(`/tasks/createOrEdit`, this.form)
@@ -138,17 +140,17 @@
             prevent(e){
                 e.preventDefault()
             },
-            getTask(){
-                return axiosInstance.get(`/tasks/${this.$route.params.id}`)
-                    .then((data) => {
-                        this.task.push(data);
-                        return this.task;
-                    })
-                    .catch((e) => {
-                        this.error = e;
-                    });
-            },
         },
+        mounted(){
+            this.form.userId= this.$route.params.id===undefined? JSON.parse(localStorage.getItem('user-info')).id: this.task.userId ;
+             this.form.title= this.$route.params.id===undefined? "": this.task.title;
+                this.form.description= this.$route.params.id===undefined? "": this.task.description;
+                this.form.type= this.$route.params.id===undefined? "task": this.task.type;
+                this.form.rank= this.$route.params.id===undefined? "low": this.task.rank;
+                this.form.assignedId= this.$route.params.id===undefined? "": this.task.assignedId;
+                this.form.id=this.$route.params.id===undefined?"": this.task.id
+
+        }
 
     };
 </script>

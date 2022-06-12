@@ -47,6 +47,8 @@
           this.isAuth=false;
           this.verifyIsAuth()
         },
+      },
+    created() {
       }
     }
 </script>

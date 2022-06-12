@@ -10,7 +10,7 @@
                         </h1>
                     </div>
                     <div>
-                        <router-link :to="{name:'eventTask'}" :key="this.task" class="take__to__work" >Добавить задачу</router-link>
+                        <router-link :to="{name:'eventTask'}" :key="this.task"  class="take__to__work" >Добавить задачу</router-link>
                       <button v-if="userInfo.id===this.user.id" class="edit__task" @click="showModal">Редактировать</button>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                     <div class="about__tasks">
                         <h2 class="taskTitle">Задачи</h2>
                         <div class="about__board"  >
-                    <router-link :to="{name:'taskCard', params:{id: task.id}}" class="task" v-for="task in taskAssignedId" :key="task.id" :task="this.task">
+                    <router-link :to="{name:'taskCard', params:{id: task.id}}" class="task" v-for="task in tasksOfUser" :key="task.id" :task="this.task">
                             <TypeBlock :task="task"/>
                             <div class="bodyTask">
                                 {{task.title}}
@@ -36,9 +36,22 @@
                             <RankBlock :task="task"/>
                         </router-link>
                     </div>
-                        <PagingBlock :user="user"/>
+                        <PagingBlock>
+                            <template #usersTasks>
+                                <div class="tabs">
+                                    <button  class="tabs__btn" :disabled="currentPage===0" @click="prevPage(page)">Назад</button>
+                                    <button  class="tab" :class="{active: currentPage===page-1}" v-for="page in pageCount" :key="page" @click="changePage(page)" >
+                                        {{page}}
+                                    </button>
+                                    <button class="tabs__btn" :disabled="currentPage===pageCount-1" @click="nextPage(page)" >Вперед</button>
+                                </div>
+                                <div class="showing__list" >
+                                    Показано {{currentPage + 1}}-{{this.pageCount}} из {{this.pageCount}}
+                                </div>
+                            </template>
+                        </PagingBlock>
 
-                  <ModalEvent :is-modal-visible="isModalVisible" :close="close" :users="users" :comments="comments" :tasks="tasks"/>
+                        <ModalEvent :isModalVisible="isModalVisible" :close="close" :users="users" :comments="comments" :tasks="tasks" @click="showModal"/>
                 </div>
                 </div>
 
@@ -65,7 +78,15 @@ import ModalEvent from "./ModalEvent";
                 isModalVisible: false,
                 userInfo:JSON.parse(localStorage.getItem('user-info')),
                 user:this.$store.state.users.find(user => user.id === this.$route.params.id),
-                src: this.$store.state.users.find(user => user.id === this.$route.params.id).photoUrl
+                src: this.$store.state.users.find(user => user.id === this.$route.params.id).photoUrl,
+                currentPage:0,
+                limit:10,
+                pages:Array.from([]),
+                formUser:{
+                    name:"",
+                    img: "",
+                    about:""
+                },
 
 
             }
@@ -79,9 +100,31 @@ import ModalEvent from "./ModalEvent";
         },
         props: {
 
+            // id:{
+            //     type: String,
+            //     required:true
+            // },
+            task: {
+                type: Object,
+                required:true
+            }
         },
         computed: {
             ...mapGetters([ 'TASKS', 'USERS']),
+            pageCount(){
+                return (
+                    Math.ceil(this.tasksOfUser.length/this.limit)
+                )
+            },
+            userTasks(){
+                return this.$store.state.tasks.filter(x=>x.assignedId===this.$route.params.id)
+            },
+            tasksOfUser(){
+                let firstItem= this.currentPage * this.limit;
+                let lastItem= firstItem + this.limit;
+                return this.userTasks.slice(firstItem, lastItem)
+            }
+
 
 
         },
@@ -96,21 +139,38 @@ import ModalEvent from "./ModalEvent";
             close() {
                 this.isModalVisible = false;
             },
+            countOfTabs(){
+                for(let i=0; i<this.pageCount;i++) {
+                    this.pages.push(i);
+                }
+                return this.pages
+            },
+            changePage(page){
+                this.currentPage=page-1
+            },
+            nextPage(){
+                this.currentPage=this.currentPage+1
+            },
+            prevPage(){
+                this.currentPage=this.currentPage-1
+            },
 
 
 
         },
         mounted(){
-            this.GET_USERS(),
-            this.GET_TASKS()
+            this.GET_TASKS(),
+            this.GET_USERS()
 
         },
         created(){
 
-            let taskAssignedId=this.TASKS.filter(task=>task.assignedId===this.user.id);
-            if(taskAssignedId){
-                this.taskAssignedId=taskAssignedId
-            }
+            // let taskAssignedId=this.TASKS.filter(task=>task.assignedId===this.user.id);
+            // if(taskAssignedId){
+            //     this.taskAssignedId=taskAssignedId
+            // }
+
+
 
         }
     };

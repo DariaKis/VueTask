@@ -11,12 +11,12 @@
             <button @click="createComments">Добавить комментарий</button>
         </div>
         <div class="comment__wrapper"  >
-                <div class="comment__body" v-for="comment in comments" :key="comment.id" :comment="comment">
+                <div class="comment__body" v-for="(comment) in comments" :key="comment.id"  :comment="comment">
                     <div>
                         <div class="comment__author">{{this.$store.state.users.find(x=>x.id===comment.userId).username}}</div>
                         <div class="comment" >{{comment.text}} </div>
                     </div>
-                        <button  v-if="userInfo===comment.userId" @click="deleteComment">Удалить</button>
+                        <button  v-if="creatorCommentId===comment.userId" @click="deleteComment(commentId)">Удалить</button>
                 </div>
         </div>
     </div>
@@ -30,9 +30,10 @@
             return {
                 comments:[],
                 form:{
-                    userInfo:JSON.parse(localStorage.getItem('user-info')).id,
                     taskId: this.task.id,
                     text: "",
+                    // commentId: this.comment.id
+
                 },
             }
         },
@@ -49,14 +50,26 @@
 
 
         },
+        computed:{
+            creatorCommentId(){
+                return JSON.parse(localStorage.getItem('user-info')).id
+            },
+            // commentId(){
+            //     // return this.comment.id
+            //     return this.comments.find(x=>x.id)
+            // }
+        },
 
         created(){
             this.fetchComments();
-            console.log(this.comments.id);
+            console.log(this.$store.state.comments)
         },
 
 
         methods: {
+            handleClick(){
+                return this.commentId = this.comment.id;
+            },
             fetchComments() {
                 return axiosInstance.get(`/comments/${this.id}`)
                     .then(comments => {
@@ -77,11 +90,20 @@
                     .catch((e) => {
                         this.error = e;
                     });
+
             },
-            deleteComment(){
-                return axiosInstance.delete(`/comments/${this.comment.id}`)
+            deleteComment(commentId){
+                return axiosInstance.delete(`/comments/${commentId}`)
+                    .then(() => {
+                        this.commentId = this.comment.id;
+                        return this.comments;
+                    })
+                    .catch((e) => {
+                        this.error = e;
+                    });
             },
         },
+
 
     }
 

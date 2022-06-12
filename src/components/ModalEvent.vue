@@ -2,6 +2,10 @@
 
  <div v-show="isModalVisible"  class="modal__active">
     <div class="modal__wrapper" >
+<!--        <modal>-->
+<!--            <slot name="modalTask"></slot>-->
+<!--            <slot name="modalUser"></slot>-->
+<!--        </modal>-->
         <h2 class="modal__title">{{this.$route.path.substr(0, 9)==="/taskCard" ? "Запись о работе" :"Редактирование пользователя"}}</h2>
 
         <div class="body" v-if="this.$route.path.substr(0, 9)==='/taskCard'">
@@ -44,7 +48,7 @@
                         name="currentUserName"
                         id="currentUserName"
                         type="text"
-                        v-model="formUser.currentUserName"/>
+                        v-model="formUser.name"/>
 
             </div>
             <div class="body__field">
@@ -52,7 +56,7 @@
                 <input
                         name="currentPhoto"
                         id="currentPhoto"
-                        v-model="this.formUser.currentPhoto"
+                        v-model="formUser.img"
                 />
 
             </div>
@@ -62,7 +66,7 @@
                         name="currentUserAbout"
                         id="currentUserAbout"
                         class="aboutInfo"
-                        v-model="formUser.currentUserAbout"
+                        v-model="formUser.about"
                 >
                </textarea>
             </div>
@@ -80,15 +84,12 @@
 </template>
 <script>
     import axiosInstance from "../api";
+    import {mapActions, mapGetters} from 'vuex';
+
 
     export default {
         data () {
             return {
-                userInfo:JSON.parse(localStorage.getItem('user-info')),
-                currentPhoto:JSON.parse(localStorage.getItem('user-info')).photoUrl,
-                currentUserAbout:JSON.parse(localStorage.getItem('user-info')).about,
-                task:this.$store.state.tasks.find(task => task.id === this.$route.params.id),
-
                 formTask: {
                     value:10,
                     quantity: "minutes",
@@ -96,8 +97,8 @@
                 },
                 formUser:{
                     name:"",
-                    img: this.currentPhoto,
-                    about:this.currentUserAbout
+                    img: "",
+                    about:""
                 },
 
             };
@@ -105,20 +106,33 @@
         name: 'ModalEvent',
         template: '#ModalEvent',
         props:{
-            isModalVisible:Boolean,
+            isModalVisible:{Boolean},
 
             close:{
                 type:Function,
                 required: true
             },
+            task:{
+                type:Object,
+                required: true
+            }
         },
         computed:{
-
+            ...mapGetters(['TASK'])
 
         },
+        mounted(){
+            this.formUser.name=JSON.parse(localStorage.getItem('user-info')).username;
+            this.formUser.img= JSON.parse(localStorage.getItem('user-info')).photoUrl;
+            this.formUser.about=JSON.parse(localStorage.getItem('user-info')).about
+            // this.TASK()
+        },
         methods:{
+            ...mapActions([
+                'GET_TASK'
+            ]),
             closeModal(){
-                this.close()
+               return this.close
             },
             timeInMinutes(){
                 if(this.formTask.quantity==="hours"){
@@ -168,7 +182,6 @@
 
         },
         created(){
-
         }
 
     }

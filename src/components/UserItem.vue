@@ -1,6 +1,6 @@
 <template>
-    <div  class="userList__item"  :key={id} >
-        <router-link :to="{name:'userCard', params:{id: user.id}}" :user="user" :task="task">
+    <div  class="userList__item"  :key={user} >
+        <router-link :to="{name:'userCard', params:{id: user.id}}" :user="user"  >
             {{user.username}}
         </router-link>
     </div>
@@ -15,10 +15,7 @@
                 type: Object,
                 required:true
             },
-            task: {
-                type: Object,
-                required:true
-            }
+
         },
     }
 </script>

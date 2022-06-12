@@ -1,9 +1,7 @@
 <template>
     <form>
         <div class="resetName">
-            <div class="input__title" v-if="selectedItem.length===0">Исполнитель</div>
-            <div class="input__title" v-else-if="selectedItem.length===this.$store.state.users.length">Выбрано: все</div>
-            <div class="input__title" v-else>Выбрано: {{selectedItem.length}}</div>
+            <div class="input__title">{{titleOfSelect}}</div>
             <div class="arrow"></div>
         </div>
         <div class="__select">
@@ -32,6 +30,8 @@
     </form>
 </template>
 <script>
+    import {mapActions, mapGetters} from 'vuex';
+
     export default {
         data(){
             return{
@@ -54,9 +54,28 @@
             },
         },
         methods: {
+            ...mapActions([
+                'GET_USERS'
+            ]),
             // Select() {
             //     this.selectedQuantityStatus()
             // },
+        },
+        computed:{
+            ...mapGetters(['USERS']),
+            titleOfSelect(){
+                if(this.selectedItem.length===0){
+                    return "Исполнитель"
+                }else if(this.selectedItem.length===this.USERS.length){
+                    return "Выбрано: все"
+                }else{
+                    return "Выбрано: " + this.selectedItem.length
+                }
+            }
+        },
+
+        mounted(){
+            this.GET_USERS()
         }
     }
 </script>
